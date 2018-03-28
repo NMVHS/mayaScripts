@@ -15,8 +15,16 @@ def main():
     cm.button("Add to Selected",height=50,width=200,command = addToSet)
     cm.button("Select Set Name Only",height=50,width=200,command = selectSet)
     cm.button("Select Set Members",height=50,width=200,command = selectSetMembers)
+    cm.button("Remove from Sets",height=50,width=200,command = removeFromSet)
     
     cm.showWindow(newWin)
+    
+def removeFromSet(*args):
+    sel = cm.ls(sl=True)
+    for each in sel:
+        belongSets = cm.listSets(object=each)
+        for eachSet in belongSets:
+            cm.sets(each,remove=eachSet)
 
 def selectSetMembers(*args):
     sel = cm.ls(sl=True)
