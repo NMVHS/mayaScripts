@@ -14,13 +14,27 @@ def main():
     cm.window(newWin,title="Dispay Layer Manager",width=200,height=200)
     baseLayout= cm.columnLayout(rowSpacing=2)
 
-    cm.textScrollList ("dispLayerTree",width=200)
-    updateDispLayers()
+    layerRow = cm.rowLayout(numberOfColumns=2)
+    cm.textScrollList ("dispLayerTree",width=160,parent=layerRow)
+    layerCtrlColumn = cm.columnLayout(rowSpacing=2,parent=layerRow)
+    cm.button("V",height=30,width=30,command=layerVisSwitch)
+
+    btnColumns = cm.columnLayout(rowSpacing=2,parent=baseLayout)
     cm.button("Add to Layer",height=30,width=200,command = addToDispLayer)
     cm.button("Export Display Layer Data",height=30,width=200, command = exportDispLayerData)
+    cm.button("Load Display Layer Data",height=30,width=200, command = loadDispLayerData)
 
+    updateDispLayers()
 
     cm.showWindow(newWin)
+
+def layerVisSwitch(*args):
+    selLayer = getDispLayerSel()[0]
+    currVis = cm.getAttr(selLayer + ".visibility")
+    if currVis:
+        cm.setAttr(selLayer + ".visibility",False)
+    else:
+        cm.setAttr(selLayer + ".visibility",True)
 
 def addToDispLayer(*args):
     #which layer is selected
@@ -56,4 +70,31 @@ def exportDispLayerData(*args):
 
     cm.textScrollList("dispLayerTree",e=True,selectItem=currSel)
 
-    print "Layer Data exported."
+    print "Display Layer Data exported."
+
+def loadDispLayerData(*args):
+    savePath = os.path.splitext(cm.file(query=True,sn=True))[0] + "_DisplayLayerData.json"
+
+    if os.path.isfile(savePath):
+        with open(savePath,"r") as inData:
+            dispLayerData = json.load(inData)
+
+    if cm.confirmDialog(title="Overwrite",button=['Yes','No'],message="Overwrite existing display layer data?",
+                        defaultButton='No', cancelButton='No', dismissString='No' ) == "Yes":
+        for eachLayer in dispLayerData:
+            if cm.objExists(eachLayer):
+                #check objects in existing members
+                existLayerMembers = cm.editDisplayLayerMembers(eachLayer,q=True)
+                for eachMember in dispLayerData[eachLayer]:
+                    if not eachMember in existLayerMembers:
+                        #if not, add to this layer
+                        cm.editDisplayLayerMembers(eachLayer,eachMember,noRecurse=True)
+
+            else:
+                #layer doesn't exist, add new layer and add all the members
+                cm.createDisplayLayer(name=eachLayer,empty=True)
+                cm.editDisplayLayerMembers(eachLayer,dispLayerData[eachLayer],noRecurse=True)
+
+        print "Display Layer Data loaded."
+    else:
+        print "Loading Display Layer Data aborted."
