@@ -18,6 +18,7 @@ class MyBrowser(QtGui.QDialog):
         QtGui.QDialog.__init__(self, parent)
         self.ui = BrowserDialog()
         self.ui.setupUi(self)
+
         self.startPage = "www.google.com"
         self.ui.lineEdit.setText(self.startPage)
 
@@ -31,8 +32,6 @@ class MyBrowser(QtGui.QDialog):
 
         self.ui.qwebview.load(QUrl(url))
         self.ui.lineEdit.setText(url)
-
-
 
 def main():
     mayaMainWindowPtr = omui.MQtUtil.mainWindow()

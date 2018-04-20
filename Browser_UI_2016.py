@@ -21,12 +21,12 @@ except AttributeError:
 class BrowserDialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
-        Dialog.resize(1024, 768)
+        Dialog.resize(804, 604)
         self.qwebview = QWebView(Dialog)
-        self.qwebview.setGeometry(QtCore.QRect(0, 50, 1020, 711))
+        self.qwebview.setGeometry(QtCore.QRect(0, 50, 800, 600))
         self.qwebview.setObjectName(_fromUtf8("kwebview"))
         self.lineEdit = QtGui.QLineEdit(Dialog)
-        self.lineEdit.setGeometry(QtCore.QRect(10, 20, 1000, 25))
+        self.lineEdit.setGeometry(QtCore.QRect(10, 20, 790, 25))
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
 
         self.retranslateUi(Dialog)
