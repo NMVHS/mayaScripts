@@ -1,6 +1,6 @@
 import sys
 from PySide import QtCore, QtGui
-from PySide.QtGui import QApplication
+from PySide.QtGui import QApplication,QVBoxLayout
 from PySide.QtCore import QUrl
 from PySide.QtWebKit import QWebView
 
@@ -22,12 +22,15 @@ class BrowserDialog(object):
     def setupUi(self, Dialog):
         Dialog.setObjectName(_fromUtf8("Dialog"))
         Dialog.resize(804, 604)
+        self.layout = QVBoxLayout(Dialog)
         self.qwebview = QWebView(Dialog)
         self.qwebview.setGeometry(QtCore.QRect(0, 50, 800, 600))
         self.qwebview.setObjectName(_fromUtf8("kwebview"))
         self.lineEdit = QtGui.QLineEdit(Dialog)
         self.lineEdit.setGeometry(QtCore.QRect(10, 20, 790, 25))
         self.lineEdit.setObjectName(_fromUtf8("lineEdit"))
+        self.layout.addWidget(self.lineEdit)
+        self.layout.addWidget(self.qwebview)
 
         self.retranslateUi(Dialog)
         QtCore.QMetaObject.connectSlotsByName(Dialog)
