@@ -19,11 +19,12 @@ class MyBrowser(QtGui.QDialog):
         self.ui = BrowserDialog()
         self.ui.setupUi(self)
 
-        self.startPage = "www.google.com"
+        self.startPage = "http://www.google.com"
         self.ui.lineEdit.setText(self.startPage)
 
         self.loadURL()
         self.ui.lineEdit.returnPressed.connect(self.loadURL)
+        self.ui.qwebview.loadFinished.connect(self.updateLink)
 
     def loadURL(self):
         url = self.ui.lineEdit.text()
@@ -31,7 +32,10 @@ class MyBrowser(QtGui.QDialog):
             url = "http://" + url
 
         self.ui.qwebview.load(QUrl(url))
-        self.ui.lineEdit.setText(url)
+
+    def updateLink(self):
+        currURL = self.ui.qwebview.url().toString()
+        self.ui.lineEdit.setText(currURL)
 
 def main():
     mayaMainWindowPtr = omui.MQtUtil.mainWindow()
