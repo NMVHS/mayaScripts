@@ -16,6 +16,10 @@ def main():
 
     savingPath = blastPath + "\\" + folderName + "\\" + folderName
 
+    if ":" in savingPath:
+        savingPath = savingPath.replace(":","_")
+        print savingPath
+
     imageWidth = cm.getAttr("defaultResolution.width")
     imageHeight = cm.getAttr("defaultResolution.height")
 
