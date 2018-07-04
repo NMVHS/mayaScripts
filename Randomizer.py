@@ -1,3 +1,6 @@
+# scale / rotation Randomizer
+# shawn - April 2018
+
 import maya.cmds as cm
 import random as rand
 

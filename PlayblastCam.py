@@ -1,3 +1,6 @@
+#quick playblast with one click
+#shawn - May 2018
+
 import maya.cmds as cm
 import os
 
