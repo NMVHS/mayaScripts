@@ -20,11 +20,11 @@ def main():
     offsetAutoPosBtn = cm.button(label = ">>50", width = 50, command = lambda x: offsetKey("manual",50))
 
     cm.rowLayout(numberOfColumns=5,parent="columns")
-    exportKeys = cm.button(label="Export Keys",width=80,command = lambda x: exportKeys())
+    exportKeysBtn = cm.button(label="Export Keys",width=80,command = lambda x: exportKeys())
     cm.text(label="New NameSpace")
     cm.textField("newNameSpace",width=80)
     cm.checkBox("useNewNameSpace",label="Use New NameSpace")
-    importKays = cm.button(label="Import Keys",width=80,command = lambda x: importKeys())
+    importKeysBtn = cm.button(label="Import Keys",width=80,command = lambda x: importKeys())
 
     cm.showWindow(win)
 
