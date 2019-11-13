@@ -10,14 +10,18 @@ def main():
     win = cm.window(uiWindow,width = 100,height = 50, title = "Offset Keyframe")
     cm.columnLayout("columns")
     cm.rowLayout(numberOfColumns=8,parent="columns")
-    offsetAutoNegBtn = cm.button(label = "50<<", width = 50, command = lambda x: offsetKey("manual",-50))
-    offsetAutoNegBtn = cm.button(label = "20<<", width = 50, command = lambda x: offsetKey("manual",-20))
-    offsetNeg2Btn = cm.button(label = "<<", width = 50, command = lambda x: offsetKey("manual",-2))
-    offsetNeg1Btn = cm.button(label = "<", width = 50, command = lambda x: offsetKey("manual",-1))
-    offsetPos1Btn = cm.button(label = ">", width = 50, command = lambda x: offsetKey("manual",1))
-    offsetPos2Btn = cm.button(label = ">>", width = 50, command = lambda x: offsetKey("manual",2))
-    offsetAutoPosBtn = cm.button(label = ">>20", width = 50, command = lambda x: offsetKey("manual",20))
-    offsetAutoPosBtn = cm.button(label = ">>50", width = 50, command = lambda x: offsetKey("manual",50))
+    offsetNeg20Btn = cm.button(label = "20<<", width = 50, command = lambda x: offsetKey(-20))
+    offsetNeg10Btn = cm.button(label = "10<<", width = 50, command = lambda x: offsetKey(-10))
+    offsetNeg2Btn = cm.button(label = "<<", width = 50, command = lambda x: offsetKey(-2))
+    offsetNeg1Btn = cm.button(label = "<", width = 50, command = lambda x: offsetKey(-1))
+    offsetPos1Btn = cm.button(label = ">", width = 50, command = lambda x: offsetKey(1))
+    offsetPos2Btn = cm.button(label = ">>", width = 50, command = lambda x: offsetKey(2))
+    offsetPos10Btn = cm.button(label = ">>10", width = 50, command = lambda x: offsetKey(10))
+    offsetPos20Btn = cm.button(label = ">>20", width = 50, command = lambda x: offsetKey(20))
+
+    cm.rowLayout(numberOfColumns=5,parent="columns")
+    alignOptionCheck = cm.checkBox("alignOptionCheck",label="Align in angle to out angle")
+    alignTangentBtn = cm.button(label="Align Tangent",width=80,command= lambda x: alignTangent())
 
     cm.rowLayout(numberOfColumns=5,parent="columns")
     exportKeysBtn = cm.button(label="Export Keys",width=80,command = lambda x: exportKeys())
@@ -28,21 +32,35 @@ def main():
 
     cm.showWindow(win)
 
-
-def offsetKey(mode, dir):
-
+def alignTangent():
+    #align key's tangent out angle to in angle-----
     animCurves = cm.keyframe(sl=True,name=True,q=True)
-
-    cnt = 1
-    if mode == "manual":
-        offsetAmount = dir
-    else:
-        offsetAmount = dir * cnt
 
     for eachCurve in animCurves:
          keyIndex = cm.keyframe(eachCurve,sl=True,indexValue=True,q=True)
+
          for eachIndex in keyIndex:
-             cm.keyframe(eachCurve,index = (eachIndex,eachIndex), timeChange = offsetAmount, relative = True)
+             inAngle = cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), inAngle = True, q = True)
+             outAngle = cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), outAngle = True, q = True)
+
+             if cm.checkBox("alignOptionCheck",q=True,value=True):
+                 cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), inAngle = outAngle[0],absolute=True)
+             else:
+                 cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), outAngle = inAngle[0],absolute=True)
+
+
+def offsetKey(dir):
+    offsetAmount = dir
+    animCurves = cm.keyframe(sl=True,name=True,q=True)
+
+    for eachCurve in animCurves:
+         keyIndex = cm.keyframe(eachCurve,sl=True,indexValue=True,q=True)
+
+         if dir > 0:
+             keyIndex = keyIndex[::-1]
+
+         for eachIndex in keyIndex:
+                 cm.keyframe(eachCurve,index = (eachIndex,eachIndex), timeChange = offsetAmount, relative = True)
 
 
 def exportKeys():
@@ -102,6 +120,3 @@ def importKeys():
             cm.setKeyframe(objectName,attribute=attribName,time=eachKey[1],value=eachKey[2])
 
     print "Keys imported successfully"
-
-if __name__ == "__main__":
-    main()
