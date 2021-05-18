@@ -20,8 +20,9 @@ def main():
     offsetPos20Btn = cm.button(label = ">>20", width = 50, command = lambda x: offsetKey(20))
 
     cm.rowLayout(numberOfColumns=5,parent="columns")
-    alignOptionCheck = cm.checkBox("alignOptionCheck",label="Align in angle to out angle")
-    alignTangentBtn = cm.button(label="Align Tangent",width=80,command= lambda x: alignTangent())
+    #alignOptionCheck = cm.checkBox("alignOptionCheck",label="Align in angle to out angle")
+    alignInTangentBtn = cm.button(label="Align In Tangent to Out",width=140,command= lambda x: alignTangent("in"))
+    alignOutTangentBtn = cm.button(label="Align Out Tangent to In",width=140,command= lambda x: alignTangent("out"))
 
     cm.rowLayout(numberOfColumns=5,parent="columns")
     exportKeysBtn = cm.button(label="Export Keys",width=80,command = lambda x: exportKeys())
@@ -32,7 +33,7 @@ def main():
 
     cm.showWindow(win)
 
-def alignTangent():
+def alignTangent(option):
     #align key's tangent out angle to in angle-----
     animCurves = cm.keyframe(sl=True,name=True,q=True)
 
@@ -43,7 +44,7 @@ def alignTangent():
              inAngle = cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), inAngle = True, q = True)
              outAngle = cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), outAngle = True, q = True)
 
-             if cm.checkBox("alignOptionCheck",q=True,value=True):
+             if option == "in":
                  cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), inAngle = outAngle[0],absolute=True)
              else:
                  cm.keyTangent(eachCurve,index = (eachIndex,eachIndex), outAngle = inAngle[0],absolute=True)
